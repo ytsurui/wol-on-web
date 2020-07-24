@@ -1,0 +1,42 @@
+
+.title-header {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background-color: #008080;
+  color: #eeeeee;
+}
+
+
+.table-responsive {
+	border: 0px;	
+}
+
+.table-wol {
+	width: 0px;
+}
+
+.mainview {
+  margin-top: 10px;
+}
+
+.add-button {
+  margin-top: 5px;
+  margin-bottom: 5px;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+
+.editmodal-elemnames {
+  margin-top: 10px;
+}
+
+.ipaddr-text {
+  width: 70%;
+  display: inline;
+}
+
+.subnetnum-text {
+  width: 20%;
+  display: inline;
+}
+

@@ -1,0 +1,14 @@
+{
+  "httpport": 80,
+  "readonly": false,
+  "machines": [
+    {
+      "id": 1,
+      "name": "sample",
+      "MacAddr": "12-34-56-78-9a-bc",
+      "ipaddr": "192.168.1.111",
+      "NetMask": 24,
+      "netaddr": "192.168.1.255"
+    }
+  ]
+}

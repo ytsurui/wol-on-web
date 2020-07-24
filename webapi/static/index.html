@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>Wol on Web</title>
+        
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+
+        <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <!--<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>-->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    
+        <link href="style.css" rel="stylesheet">
+
+        
+    </head>
+    <body>
+        <header class="container-fluid title-header">
+            <h1 id="page-title" class="container pagetitle">Wol on Web</h1>
+        </header>
+
+        <div class="container mainview">
+          <div class="table-responsive">
+            <table class="table table-bordered table-striped text-nowrap table-wol">
+                <thead>
+                    <tr>
+                        <th>マシン名</th>
+                        <th>状態</th>
+                        <th>MAC Address</th>
+                        <th>IP Addr / Subnet</th>
+                        <th>Wol Network</th>
+                    </tr>
+                </thead>
+                <tbody id="machine-table">
+
+                </tbody>
+            </table>
+
+            <button type="button" class="btn btn-primary add-button" onclick="openNewModal();">追加</button>
+          </div>
+        </div>
+
+        <div class="modal fade" id="modalconfig" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h4 class="modal-title">追加・編集</h4>
+                    </div>
+                    <div class="modal-body">
+                        <div>
+                            <h6 class="editmodal-elemnames-top">Computer Name</h6>
+                            <input type="text" id="edit-name" aria-label="name" class="form-control" required></input>
+                            <div class="invalid-feedback" for="edit-name">必ず入力してください</div>
+                        </div>
+                        <div>
+                            <h6 class="editmodal-elemnames">Mac Address</h6>
+                            <input type="text" id="edit-mac" aria-label="mac" maxlength="17" class="form-control" required></input>
+                            <div class="invalid-feedback" for="edit-mac">必ず入力してください</div>
+                        </div>
+                        <div>
+                            <h6 class="editmodal-elemnames">IPv4 Addr / Subnet</h6>
+                            <input type="text" id="edit-ip" aria-label="ip" class="form-control ipaddr-text" required></input> / 
+                            <input type="text" id="edit-subnet" aria-label="subnet" maxlength="2" class="form-control subnetnum-text"></input>
+                            <div id="subnet-display"></div>
+                            <div class="invalid-feedback" for="edit-subnet">必ず入力してください</div>
+                        </div>
+                        <h6 class="editmodal-elemnames">Wol Packet Broadcast Network</h6>
+                        <input type="text" id="edit-wolnet" aria-label="subnet" class="form-control"></input>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" id="edit-delbutton" class="btn btn-danger mr-auto" onclick="deleteConfigModal();">削除</button>
+                        <button type="button" class="btn btn-primary" onclick="saveConfigModal();">保存</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">キャンセル</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script src="main.js"></script>
+    </body>
+
+</html>
