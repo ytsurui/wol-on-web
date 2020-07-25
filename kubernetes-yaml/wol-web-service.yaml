@@ -1,0 +1,90 @@
+
+kind: Deployment
+apiVersion: apps/v1
+metadata:
+  name: wol-on-web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: wol-on-web
+  template:
+    metadata:
+      labels:
+        service: wol-on-web
+    spec:
+      volumes:
+        - name: wol-on-web-config
+          configMap:
+            name: wol-on-web-configmap
+            defaultMode: 420
+      containers:
+        - name: wol-on-web
+          image: 'ytsurui/wol-on-web:latest'
+          ports:
+            - containerPort: 80
+              protocol: TCP
+          resources:
+            limits:
+              cpu: 500m
+              memory: 30Mi
+            requests:
+              cpu: 30m
+              memory: 30Mi
+          args: 
+            - /app
+            - '-c'
+            - /conf/config.json
+          volumeMounts:
+            - name: wol-on-web-config
+              mountPath: /conf
+              subPath: config.json
+          imagePullPolicy: Always
+      restartPolicy: Always
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  revisionHistoryLimit: 10
+  progressDeadlineSeconds: 600
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: wol-on-web
+  labels:
+    service: wol-on-web
+spec:
+  type: NodePort
+  selector:
+    service: wol-on-web
+  ports:
+    - protocol: TCP
+      port: 80
+
+---
+
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: wol-on-web-configmap
+data:
+  config.json: |
+    {
+      "httpport": 80,
+      "allowDownloadConfig": true,
+      "readOnly": true,
+      "machines": [
+        {
+          "id": 1,
+          "name": "sample",
+          "MacAddr": "12-34-56-78-9a-bc",
+          "ipaddr": "192.168.1.111",
+          "NetMask": 24,
+          "netaddr": "192.168.1.255"
+        }
+      ]
+    }
