@@ -7,7 +7,6 @@ import (
 )
 
 func getItem(w http.ResponseWriter, r *http.Request) int {
-
 	params := r.URL.Query()
 
 	if _, ok := params["id"]; ok {
@@ -24,6 +23,7 @@ func getItem(w http.ResponseWriter, r *http.Request) int {
 				w.WriteHeader(http.StatusInternalServerError)
 				return (http.StatusInternalServerError)
 			}
+			w.Header().Add("Content-Type", "application/json; charset=utf-8")
 			w.WriteHeader(http.StatusOK)
 			w.Write(respDataByte)
 			return (http.StatusOK)

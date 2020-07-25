@@ -5,17 +5,21 @@ import (
 	"errors"
 	"fmt"
 	"io/ioutil"
+	"net/http"
 	"os"
 )
 
 type apiconfig struct {
-	HttpPort int           `json:"httpport"`
-	ReadOnly bool          `json:"readonly"`
-	Machines []MachineInfo `json:"machines"`
+	HTTPPort            int           `json:"httpport"`
+	AllowDownloadConfig bool          `json:"allowDownloadConfig"`
+	ReadOnly            bool          `json:"readonly"`
+	Machines            []MachineInfo `json:"machines"`
 }
 
 var apiConfigData apiconfig
 var maxID int
+
+var configPath string
 
 func ReadFile(fileName string) (bytes []byte, err error) {
 	bytes, err = ioutil.ReadFile(fileName)
@@ -39,10 +43,8 @@ func WriteFile(fileName string, writedata []byte) error {
 	return nil
 }
 
-func InitConfig() {
-	var jsonFile string
-	jsonFile = "config.json"
-
+func InitConfig(jsonFile string) {
+	configPath = jsonFile
 	configData, err := ReadFile(jsonFile)
 	if err != nil {
 		fmt.Println("[InitConfig] Config File Not Found")
@@ -68,20 +70,25 @@ func InitConfig() {
 }
 
 func writeConfigData() (errInfo error) {
-	var jsonFile string
-	jsonFile = "config.json"
-
 	writeBytes, err := json.MarshalIndent(apiConfigData, "", "  ")
 	if err != nil {
 		return err
 	}
 
-	err = WriteFile(jsonFile, writeBytes)
+	err = WriteFile(configPath, writeBytes)
 	if err != nil {
 		return (err)
 	}
 
 	return nil
+}
+
+func downloadConfig() (confBytes []byte, err error) {
+	if apiConfigData.AllowDownloadConfig {
+		confBytes, err = json.MarshalIndent(apiConfigData, "", "  ")
+		return
+	}
+	return nil, nil
 }
 
 func getMachineListData() []MachineInfo {
@@ -144,8 +151,41 @@ func deleteMachineItemData(id int) (errInfo error) {
 }
 
 func GetHttpPortNum() int {
-	if apiConfigData.HttpPort <= 0 || apiConfigData.HttpPort > 65535 {
+	if apiConfigData.HTTPPort <= 0 || apiConfigData.HTTPPort > 65535 {
 		return (80)
 	}
-	return apiConfigData.HttpPort
+	return apiConfigData.HTTPPort
+}
+
+func checkConfigFlag(w http.ResponseWriter, r *http.Request) int {
+	params := r.URL.Query()
+
+	if _, ok := params["key"]; ok {
+		if len(params["key"]) != 0 {
+			readdata := make(map[string]interface{})
+			for _, v := range params["key"] {
+				switch v {
+				case "readonly":
+					readdata["readonly"] = apiConfigData.ReadOnly
+				case "allowdownconf":
+					readdata["allowdownconf"] = apiConfigData.AllowDownloadConfig
+				default:
+					w.WriteHeader(http.StatusBadRequest)
+					return (http.StatusBadRequest)
+				}
+			}
+			respByte, err := json.Marshal(readdata)
+			if err != nil {
+				w.WriteHeader(http.StatusInternalServerError)
+				return (http.StatusInternalServerError)
+			}
+
+			w.Header().Add("Content-Type", "application/json; charset=utf-8")
+			w.WriteHeader(http.StatusOK)
+			w.Write(respByte)
+			return (http.StatusOK)
+		}
+	}
+	w.WriteHeader(http.StatusBadRequest)
+	return (http.StatusBadRequest)
 }

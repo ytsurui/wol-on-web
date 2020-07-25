@@ -23,6 +23,7 @@ func getMachineList(w http.ResponseWriter, r *http.Request) int {
 		return (http.StatusInternalServerError)
 	}
 
+	w.Header().Add("Content-Type", "application/json; charset=utf-8")
 	w.WriteHeader(http.StatusOK)
 	w.Write(respDataByte)
 	return (http.StatusOK)

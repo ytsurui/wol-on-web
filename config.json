@@ -1,5 +1,6 @@
 {
   "httpport": 80,
+  "allowDownloadConfig": true,
   "readonly": false,
   "machines": [
     {

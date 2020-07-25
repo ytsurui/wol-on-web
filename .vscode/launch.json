@@ -10,11 +10,8 @@
             "request": "launch",
             "mode": "debug",
             "program": "${workspaceFolder}/webapi/main.go",
-            "env": {
-                "SQLDEBUG": true,
-                "TZ": "JST"
-            },
-            "args": []
+            "env": {},
+            "args": ["-c", "../config.json"]
         }
     ]
 }

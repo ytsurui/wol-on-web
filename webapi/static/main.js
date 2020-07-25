@@ -20,7 +20,8 @@ function getMachineList() {
         url: "/api/machines"
     }).done(function(data, dataType) {
 
-        var machines = JSON.parse(data)
+        //var machines = JSON.parse(data)
+        machines = data;
 
         $.each(machines, function(i, machineData){
             var tr = $("<tr />");
@@ -119,7 +120,8 @@ function openConfigModal(id) {
             $('#modalconfig').modal('hide');
         }
     }).done(function(recvData) {
-        var machineInfo = JSON.parse(recvData);
+        //var machineInfo = JSON.parse(recvData);
+        machineInfo = recvData;
         configID = machineInfo.id;
         $("#edit-name").val(machineInfo.name);
         $("#edit-mac").val(machineInfo.MacAddr);
@@ -413,9 +415,31 @@ function calcBroadcastAddr() {
     $("#edit-wolnet").val(netmaskStr);
 }
 
+function checkAvailableFunc() {
+    $.ajax({
+        type: "GET",
+        url: "/api/conf/checkflag?key=readonly&key=allowdownconf"
+    }).done(function(availableConf) {
+        console.log(availableConf);
+        if (availableConf.allowdownconf) {
+            $("#download-conf-button").show();
+        } else {
+            $("#download-conf-button").hide();
+        }
+        if (availableConf.readonly) {
+            $("#machine-add-button").hide();
+        } else {
+            $("#machine-add-button").show();
+        }
+    });
+}
 
+function downloadConfig() {
+    window.location.href = "/api/conf/get"
+}
 
 getMachineList();
+checkAvailableFunc();
 
 var configID = 0;
 
@@ -432,3 +456,4 @@ editMac.on("keyup", editMAC);
 
 var editSubnet = $("#edit-subnet");
 editSubnet.on("keyup", convNetmask);
+

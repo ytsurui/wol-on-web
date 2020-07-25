@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"log"
 	"net/http"
 	"strconv"
@@ -27,6 +28,12 @@ func httpHandler() {
 	httpRouter.HandleFunc("/api/machines/item", machines.GetMachineItem)
 	httpRouter.HandleFunc("/api/machines/item/", machines.GetMachineItem)
 
+	httpRouter.HandleFunc("/api/conf/get", machines.GetMachineConfig)
+	httpRouter.HandleFunc("/api/conf/get/", machines.GetMachineConfig)
+
+	httpRouter.HandleFunc("/api/conf/checkflag", machines.CheckConfigFlag)
+	httpRouter.HandleFunc("/api/conf/checkflag/", machines.CheckConfigFlag)
+
 	httpRouter.HandleFunc("/api/wol", wol.SendWolPacket)
 	httpRouter.HandleFunc("/api/wol/", wol.SendWolPacket)
 
@@ -44,6 +51,15 @@ func httpHandler() {
 }
 
 func main() {
-	machines.InitConfig()
+	cfgName := flag.String("c", "config.json", "Config Path")
+	//helpMode := flag.Lookup("help")
+	flag.Parse()
+
+	//if helpMode != nil {
+	//	fmt.Println("Usage")
+	//	return
+	//}
+
+	machines.InitConfig(*cfgName)
 	httpHandler()
 }
