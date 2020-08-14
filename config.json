@@ -10,6 +10,14 @@
       "ipaddr": "192.168.1.111",
       "NetMask": 24,
       "netaddr": "192.168.1.255"
+    },
+    {
+      "id": 2,
+      "name": "sample-localhost",
+      "MacAddr": "aa-bb-cc-dd-ee-ff",
+      "ipaddr": "127.0.0.1",
+      "NetMask": 24,
+      "netaddr": "192.168.1.255"
     }
   ]
 }
