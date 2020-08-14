@@ -403,10 +403,10 @@ function calcBroadcastAddr() {
             netmask = 0;
         }
         maskValue = 256 - (1 << (8 - netmaskVal));
-        netAria = 255 ^ maskValue;
+        netArea = 255 ^ maskValue;
 
         netmaskElem = Number(ipelem[i]) & maskValue;
-        if (netAria != 0) netmaskElem = netmaskElem | netAria;
+        if (netArea != 0) netmaskElem = netmaskElem | netArea;
 
         netmaskStr = netmaskStr + String(netmaskElem) + ".";
     }
@@ -428,8 +428,10 @@ function checkAvailableFunc() {
         }
         if (availableConf.readonly) {
             $("#machine-add-button").hide();
+            $("#edit-delbutton").hide();
         } else {
             $("#machine-add-button").show();
+            $("#edit-delbutton").show();
         }
     });
 }
