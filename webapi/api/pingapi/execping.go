@@ -1,6 +1,7 @@
 package pingapi
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"time"
@@ -35,7 +36,16 @@ func execPing(w http.ResponseWriter, r *http.Request) int {
 			return (http.StatusNotFound)
 		}
 
+		respMap := map[string]string{"ipaddr": addr}
+		respData, err := json.Marshal(respMap)
+
+		if err != nil {
+			w.WriteHeader(http.StatusInternalServerError)
+			return (http.StatusInternalServerError)
+		}
+		w.Header().Add("Content-Type", "application/json; charset=utf-8")
 		w.WriteHeader(http.StatusOK)
+		w.Write(respData)
 		return (http.StatusOK)
 	}
 	w.WriteHeader(http.StatusBadRequest)

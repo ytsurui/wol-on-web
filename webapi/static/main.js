@@ -68,11 +68,19 @@ function checkState(ipaddr, respelem) {
             checkStateInterval(ipaddr, respelem);
         }
     }).done(function(recvData) {
-        respelem.empty();
-        var mState = $("<span />").text("起動中");
-        mState.addClass("badge badge-pill badge-success");
-        respelem.append(mState);
-        checkStateInterval(ipaddr, respelem);
+        if ('ipaddr' in recvData) {
+            respelem.empty();
+            var mState = $("<span />").text("起動中");
+            mState.addClass("badge badge-pill badge-success");
+            respelem.append(mState);
+            checkStateInterval(ipaddr, respelem);
+        } else {
+            respelem.empty();
+            var mState = $("<span />").text("不明");
+            mState.addClass("badge badge-pill badge-warning");
+            respelem.append(mState);
+            checkStateInterval(ipaddr, respelem);
+        }
     })
 }
 
